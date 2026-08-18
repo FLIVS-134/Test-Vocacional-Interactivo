@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Panel de Administrador</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/estilos.css"
+    >
+
+</head>
+
+<body>
+
+    <main class="admin-container">
+
+        <h1>Panel de Administrador</h1>
+
+        <p id="bienvenida">
+            Cargando información...
+        </p>
+
+        <div class="admin-menu">
+
+            <button onclick="irPreguntas()">
+                Gestionar preguntas
+            </button>
+
+            <button onclick="irUsuarios()">
+                Gestionar usuarios
+            </button>
+
+            <button onclick="irAreas()">
+                Gestionar áreas
+            </button>
+
+            <button onclick="irCarreras()">
+                Gestionar carreras
+            </button>
+
+        </div>
+
+        <button
+            class="logout"
+            onclick="cerrarSesion()"
+        >
+            Cerrar sesión
+        </button>
+
+    </main>
+
+    <script src="/js/admin.js"></script>
+
+</body>
+
+</html>

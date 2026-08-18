@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Iniciar sesión</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/estilos.css"
+    >
+
+</head>
+
+<body>
+
+    <main class="form-container">
+
+        <h1>Iniciar sesión</h1>
+
+        <form id="loginForm">
+
+            <input
+                type="email"
+                id="correo"
+                placeholder="Correo electrónico"
+                required
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Contraseña"
+                required
+            >
+
+            <button type="submit">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+        <p id="mensaje"></p>
+
+        <p>
+            ¿No tienes una cuenta?
+            <a href="/registro.html">
+                Registrarme
+            </a>
+        </p>
+
+    </main>
+
+    <script src="/js/login.js"></script>
+
+</body>
+
+</html>

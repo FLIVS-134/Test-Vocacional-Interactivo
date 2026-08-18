@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Gestionar preguntas</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/estilos.css"
+    >
+
+</head>
+
+<body>
+
+    <main class="admin-container">
+
+        <h1>Gestionar preguntas</h1>
+
+        <form id="preguntaForm">
+
+            <input
+                type="text"
+                id="pregunta"
+                placeholder="Escribe una pregunta"
+                required
+            >
+
+            <button type="submit">
+                Agregar pregunta
+            </button>
+
+        </form>
+
+        <p id="mensaje"></p>
+
+        <hr>
+
+        <h2>Preguntas registradas</h2>
+
+        <div id="listaPreguntas"></div>
+
+        <br>
+
+        <a href="/admin/panel.html">
+            Volver al panel
+        </a>
+
+    </main>
+
+    <script src="/js/preguntas.js"></script>
+
+</body>
+
+</html>
