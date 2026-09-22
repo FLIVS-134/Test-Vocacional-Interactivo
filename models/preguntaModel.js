@@ -1,67 +1,136 @@
-const conexion = require("../config/database");
+const db = require("../config/database");
 
+// ==========================================
+// OBTENER TODAS LAS PREGUNTAS
+// ==========================================
 
-const obtenerPreguntas = (callback) => {
+async function obtenerPreguntas() {
 
-    const sql = `
+    const [filas] = await db.query(
+        `
         SELECT *
         FROM preguntas
         ORDER BY id_pregunta DESC
-    `;
+        `
+    );
 
-    conexion.query(sql, callback);
-};
+    return filas;
+}
 
 
-const obtenerPreguntaPorId = (id, callback) => {
+// ==========================================
+// OBTENER PREGUNTA POR ID
+// ==========================================
 
-    const sql = `
+async function obtenerPreguntaPorId(id) {
+
+    const [filas] = await db.query(
+        `
         SELECT *
         FROM preguntas
         WHERE id_pregunta = ?
-    `;
+        `,
+        [id]
+    );
 
-    conexion.query(sql, [id], callback);
-};
-
-
-const crearPregunta = (pregunta, callback) => {
-
-    const sql = `
-        INSERT INTO preguntas (pregunta)
-        VALUES (?)
-    `;
-
-    conexion.query(sql, [pregunta], callback);
-};
+    return filas[0];
+}
 
 
-const actualizarPregunta = (id, pregunta, callback) => {
+// ==========================================
+// CREAR PREGUNTA
+// ==========================================
 
-    const sql = `
+async function crearPregunta(
+    pregunta,
+    idCategoria = 1
+) {
+
+    const [resultado] = await db.query(
+        `
+        INSERT INTO preguntas
+        (pregunta, id_categoria, estado)
+        VALUES (?, ?, ?)
+        `,
+        [
+            pregunta,
+            Number(idCategoria),
+            "activo"
+        ]
+    );
+
+    return resultado.insertId;
+}
+
+
+// ==========================================
+// ACTUALIZAR PREGUNTA
+// ==========================================
+
+async function actualizarPregunta(
+    id,
+    pregunta,
+    idCategoria
+) {
+
+    if (idCategoria !== undefined) {
+
+        const [resultado] = await db.query(
+            `
+            UPDATE preguntas
+            SET
+                pregunta = ?,
+                id_categoria = ?
+            WHERE id_pregunta = ?
+            `,
+            [
+                pregunta,
+                Number(idCategoria),
+                id
+            ]
+        );
+
+        return resultado;
+    }
+
+
+    const [resultado] = await db.query(
+        `
         UPDATE preguntas
         SET pregunta = ?
         WHERE id_pregunta = ?
-    `;
-
-    conexion.query(
-        sql,
-        [pregunta, id],
-        callback
+        `,
+        [
+            pregunta,
+            id
+        ]
     );
-};
+
+    return resultado;
+}
 
 
-const eliminarPregunta = (id, callback) => {
+// ==========================================
+// ELIMINAR PREGUNTA
+// ==========================================
 
-    const sql = `
+async function eliminarPregunta(id) {
+
+    const [resultado] = await db.query(
+        `
         DELETE FROM preguntas
         WHERE id_pregunta = ?
-    `;
+        `,
+        [id]
+    );
 
-    conexion.query(sql, [id], callback);
-};
+    return resultado;
+}
 
+
+// ==========================================
+// EXPORTAR
+// ==========================================
 
 module.exports = {
     obtenerPreguntas,

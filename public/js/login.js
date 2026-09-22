@@ -1,80 +1,112 @@
 const formulario =
-    document.getElementById("loginForm");
+document.getElementById("loginForm");
 
 const mensaje =
-    document.getElementById("mensaje");
+document.getElementById("mensaje");
+
+if (formulario) {
+
+formulario.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
 
 
-formulario.addEventListener("submit", async (event) => {
+        const correo =
+            document.getElementById(
+                "correo"
+            ).value.trim();
 
-    event.preventDefault();
-
-
-    const correo =
-        document.getElementById("correo").value;
-
-    const password =
-        document.getElementById("password").value;
-
-
-    try {
-
-        const respuesta = await fetch(
-            "/api/auth/login",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    correo,
-                    password
-                })
-            }
-        );
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
 
 
-        const datos = await respuesta.json();
+        mensaje.textContent = "";
 
-        console.log("DATOS DEL LOGIN:", datos);
 
-        if (!respuesta.ok) {
+        if (!correo || !password) {
 
             mensaje.textContent =
-                datos.mensaje;
+                "Completa todos los campos.";
 
             return;
+
         }
 
 
-        mensaje.textContent =
-            `Bienvenido/a ${datos.usuario.nombre}`;
+        try {
+
+            const respuesta =
+                await fetch(
+                    "/api/auth/login",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            correo,
+                            password
+                        })
+                    }
+                );
 
 
-        setTimeout(() => {
+            const datos =
+                await respuesta.json();
 
-            if (datos.usuario.rol === "admin") {
 
-                window.location.href = "/admin/panel.html";
+            if (!respuesta.ok) {
 
-            } else {
+                mensaje.textContent =
+                    datos.mensaje ||
+                    "Correo o contraseña incorrectos.";
 
-                window.location.href = "/test.html";
+                return;
 
             }
 
-        }, 1000);
+
+            mensaje.textContent =
+                `Bienvenido/a ${datos.usuario.nombre}`;
 
 
-    } catch (error) {
+            setTimeout(() => {
 
-        console.error(error);
+                if (
+                    datos.usuario &&
+                    datos.usuario.rol === "admin"
+                ) {
 
-        mensaje.textContent =
-            "No se pudo conectar con el servidor.";
+                    window.location.href =
+                        "/admin/panel.html";
+
+                } else {
+
+                    window.location.href =
+                        "/test.html";
+
+                }
+
+            }, 1000);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            mensaje.textContent =
+                "No se pudo conectar con el servidor.";
+
+        }
 
     }
+);
 
-});
+}

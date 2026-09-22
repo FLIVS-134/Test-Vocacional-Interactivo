@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Test Vocacional Interactivo</title>
+
+<link rel="stylesheet" href="/css/estilos.css">
+
+</head>
+
+<body>
+
+<main class="test-container">
+
+    <header class="test-header">
+        <h1>Test <span>Vocacional</span></h1>
+
+        <p>
+            Descubre tus intereses, habilidades y áreas profesionales
+            que podrían encajar contigo.
+        </p>
+    </header>
+
+
+    <!-- PROGRESO -->
+
+    <section class="progreso-contenedor">
+
+        <div class="progreso-info">
+            <span>Progreso</span>
+            <span id="progresoTexto">0%</span>
+        </div>
+
+        <div class="progreso-barra">
+            <div id="progreso"></div>
+        </div>
+
+    </section>
+
+
+    <!-- PREGUNTAS -->
+
+    <section id="preguntasContainer">
+
+        <!-- Las preguntas serán cargadas mediante JavaScript -->
+
+    </section>
+
+
+    <!-- MENSAJE -->
+
+    <div id="mensaje"></div>
+
+
+    <!-- BOTONES -->
+
+    <div class="botones-test">
+
+        <button
+            type="button"
+            class="btn-test btn-secundario"
+            id="btnAnterior">
+            Anterior
+        </button>
+
+        <button
+            type="button"
+            class="btn-test btn-principal"
+            id="btnSiguiente">
+            Siguiente
+        </button>
+
+    </div>
+
+
+    <!-- RESULTADO -->
+
+    <section
+        class="resultado-container"
+        id="resultadoContainer">
+
+        <h2>
+            ¡Tu resultado está <span>listo!</span>
+        </h2>
+
+        <p id="resultadoTexto">
+            Estamos analizando tus respuestas.
+            ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+        </p>
+
+    </section>
+
+</main>
+
+
+<script src="/js/test.js"></script>
+
+</body>
+</html>

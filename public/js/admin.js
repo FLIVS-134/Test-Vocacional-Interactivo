@@ -1,65 +1,102 @@
 async function cargarAdministrador() {
 
-    try {
+try {
 
-        const respuesta = await fetch(
-            "/api/admin/panel"
-        );
+    const respuesta = await fetch(
+        "/api/admin/panel"
+    );
 
-        const datos = await respuesta.json();
+    const datos =
+        await respuesta.json();
 
-        if (!respuesta.ok) {
+    if (!respuesta.ok) {
 
-            window.location.href = "/login.html";
+        window.location.href =
+            "/login.html";
 
-            return;
-        }
+        return;
+    }
 
+    const bienvenida =
         document.getElementById(
             "bienvenida"
-        ).textContent =
+        );
+
+    if (bienvenida) {
+
+        bienvenida.textContent =
             `Bienvenido/a, ${datos.usuario.nombre}`;
 
-    } catch (error) {
-
-        console.error(error);
-
-        window.location.href = "/login.html";
     }
+
+} catch (error) {
+
+    console.error(error);
+
+    window.location.href =
+        "/login.html";
+
 }
 
+}
+
+// ==========================================
+// NAVEGACIÓN DEL ADMINISTRADOR
+// ==========================================
 
 function irPreguntas() {
 
-    window.location.href =
-        "/admin/preguntas.html";
-}
+window.location.href =
+    "/admin/preguntas.html";
 
+}
 
 function irUsuarios() {
 
-    alert("Gestión de usuarios próximamente");
-}
+window.location.href =
+    "/admin/usuarios.html";
 
+}
 
 function irAreas() {
 
-    alert("Gestión de áreas próximamente");
-}
+window.location.href =
+    "/admin/areas.html";
 
+}
 
 function irCarreras() {
 
-    alert("Gestión de carreras próximamente");
+window.location.href =
+    "/admin/carreras.html";
+
 }
 
+// ==========================================
+// CERRAR SESIÓN
+// ==========================================
 
 async function cerrarSesion() {
 
-    await fetch("/api/auth/logout");
+try {
 
-    window.location.href = "/login.html";
+    await fetch(
+        "/api/auth/logout"
+    );
+
+} catch (error) {
+
+    console.error(error);
+
 }
 
+window.location.href =
+    "/login.html";
+
+}
+
+// ==========================================
+// INICIAR
+// ==========================================
 
 cargarAdministrador();

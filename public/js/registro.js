@@ -1,68 +1,138 @@
 const formulario =
-    document.getElementById("registroForm");
+document.getElementById("registroForm");
 
 const mensaje =
-    document.getElementById("mensaje");
+document.getElementById("mensaje");
+
+if (formulario) {
+
+formulario.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
 
 
-formulario.addEventListener("submit", async (event) => {
+        const nombre =
+            document.getElementById(
+                "nombre"
+            ).value.trim();
 
-    event.preventDefault();
+        const correo =
+            document.getElementById(
+                "correo"
+            ).value.trim();
 
-    const nombre =
-        document.getElementById("nombre").value;
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
 
-    const correo =
-        document.getElementById("correo").value;
-
-    const password =
-        document.getElementById("password").value;
-
-
-    try {
-
-        const respuesta = await fetch(
-            "/api/auth/registro",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    nombre,
-                    correo,
-                    password
-                })
-            }
-        );
+        const confirmarPassword =
+            document.getElementById(
+                "confirmarPassword"
+            ).value;
 
 
-        const datos = await respuesta.json();
+        mensaje.textContent = "";
 
 
-        mensaje.textContent = datos.mensaje;
+        // ==========================================
+        // VALIDAR CAMPOS
+        // ==========================================
 
+        if (
+            !nombre ||
+            !correo ||
+            !password ||
+            !confirmarPassword
+        ) {
 
-        if (respuesta.ok) {
+            mensaje.textContent =
+                "Completa todos los campos.";
 
-            formulario.reset();
-
-            setTimeout(() => {
-                window.location.href =
-                    "/login.html";
-            }, 1500);
+            return;
 
         }
 
-    } catch (error) {
 
-        console.error(error);
+        // ==========================================
+        // VALIDAR CONTRASEÑAS
+        // ==========================================
 
-        mensaje.textContent =
-            "No se pudo conectar con el servidor.";
+        if (
+            password !==
+            confirmarPassword
+        ) {
+
+            mensaje.textContent =
+                "Las contraseñas no coinciden.";
+
+            return;
+
+        }
+
+
+        try {
+
+            const respuesta =
+                await fetch(
+                    "/api/auth/registro",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            nombre,
+                            correo,
+                            password
+                        })
+                    }
+                );
+
+
+            const datos =
+                await respuesta.json();
+
+
+            mensaje.textContent =
+                datos.mensaje;
+
+
+            if (respuesta.ok) {
+
+                formulario.reset();
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "/login.html";
+
+                }, 1500);
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            mensaje.textContent =
+                "No se pudo conectar con el servidor.";
+
+        }
 
     }
+);
 
-});
+} else {
+
+console.error(
+    "No se encontró el formulario de registro."
+);
+
+}

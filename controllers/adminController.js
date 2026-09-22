@@ -1,33 +1,77 @@
 const preguntaModel =
-    require("../models/preguntaModel");
+require("../models/preguntaModel");
 
+const categoriaModel =
+require("../models/categoriaModel");
 
-const listarPreguntas = (req, res) => {
+// ==========================================
+// LISTAR PREGUNTAS
+// ==========================================
 
-    preguntaModel.obtenerPreguntas(
-        (error, resultados) => {
+const listarPreguntas = async (req, res) => {
 
-            if (error) {
+try {
 
-                console.error(error);
+    const preguntas =
+        await preguntaModel.obtenerPreguntas();
 
-                return res.status(500).json({
-                    mensaje: "Error al obtener preguntas"
-                });
+    res.json(preguntas);
 
-            }
+} catch (error) {
 
-            res.json(resultados);
-        }
-    );
+    console.error(error);
+
+    res.status(500).json({
+        mensaje: "Error al obtener preguntas"
+    });
+
+}
+
 };
 
+// ==========================================
+// LISTAR CATEGORÍAS
+// ==========================================
 
-const crearPregunta = (req, res) => {
+const listarCategorias = async (req, res) => {
 
-    const { pregunta } = req.body;
+try {
 
-    if (!pregunta || pregunta.trim() === "") {
+    const categorias =
+        await categoriaModel.obtenerCategorias();
+
+    res.json(categorias);
+
+} catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+        mensaje: "Error al obtener categorías"
+    });
+
+}
+
+};
+
+// ==========================================
+// CREAR PREGUNTA
+// ==========================================
+
+const crearPregunta = async (req, res) => {
+
+try {
+
+    const {
+        pregunta,
+        id_categoria
+    } = req.body;
+
+
+    if (
+        !pregunta ||
+        pregunta.trim() === ""
+    ) {
 
         return res.status(400).json({
             mensaje: "La pregunta es obligatoria"
@@ -35,36 +79,61 @@ const crearPregunta = (req, res) => {
 
     }
 
-    preguntaModel.crearPregunta(
-        pregunta,
-        (error, resultado) => {
 
-            if (error) {
+    if (!id_categoria) {
 
-                console.error(error);
+        return res.status(400).json({
+            mensaje: "La categoría es obligatoria"
+        });
 
-                return res.status(500).json({
-                    mensaje: "Error al crear pregunta"
-                });
+    }
 
-            }
 
-            res.json({
-                mensaje: "Pregunta creada correctamente",
-                id: resultado.insertId
-            });
+    const id =
+        await preguntaModel.crearPregunta(
+            pregunta.trim(),
+            id_categoria
+        );
 
-        }
-    );
+
+    res.json({
+        mensaje: "Pregunta creada correctamente",
+        id: id
+    });
+
+
+} catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+        mensaje: "Error al crear pregunta"
+    });
+
+}
+
 };
 
+// ==========================================
+// ACTUALIZAR PREGUNTA
+// ==========================================
 
-const actualizarPregunta = (req, res) => {
+const actualizarPregunta = async (req, res) => {
+
+try {
 
     const { id } = req.params;
-    const { pregunta } = req.body;
 
-    if (!pregunta || pregunta.trim() === "") {
+    const {
+        pregunta,
+        id_categoria
+    } = req.body;
+
+
+    if (
+        !pregunta ||
+        pregunta.trim() === ""
+    ) {
 
         return res.status(400).json({
             mensaje: "La pregunta es obligatoria"
@@ -72,60 +141,152 @@ const actualizarPregunta = (req, res) => {
 
     }
 
-    preguntaModel.actualizarPregunta(
+
+    if (!id_categoria) {
+
+        return res.status(400).json({
+            mensaje: "La categoría es obligatoria"
+        });
+
+    }
+
+
+    await preguntaModel.actualizarPregunta(
         id,
-        pregunta,
-        (error) => {
-
-            if (error) {
-
-                console.error(error);
-
-                return res.status(500).json({
-                    mensaje: "Error al actualizar pregunta"
-                });
-
-            }
-
-            res.json({
-                mensaje: "Pregunta actualizada correctamente"
-            });
-
-        }
+        pregunta.trim(),
+        id_categoria
     );
+
+
+    res.json({
+        mensaje: "Pregunta actualizada correctamente"
+    });
+
+
+} catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+        mensaje: "Error al actualizar pregunta"
+    });
+
+}
+
 };
 
+// ==========================================
+// ELIMINAR PREGUNTA
+// ==========================================
 
-const eliminarPregunta = (req, res) => {
+const eliminarPregunta = async (req, res) => {
+
+try {
 
     const { id } = req.params;
 
-    preguntaModel.eliminarPregunta(
-        id,
-        (error) => {
 
-            if (error) {
-
-                console.error(error);
-
-                return res.status(500).json({
-                    mensaje: "Error al eliminar pregunta"
-                });
-
-            }
-
-            res.json({
-                mensaje: "Pregunta eliminada correctamente"
-            });
-
-        }
+    await preguntaModel.eliminarPregunta(
+        id
     );
+
+
+    res.json({
+        mensaje: "Pregunta eliminada correctamente"
+    });
+
+
+} catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+        mensaje: "Error al eliminar pregunta"
+    });
+
+}
+
 };
 
+// ==========================================
+// EXPORTAR
+// ==========================================
+
+const listarCarreras = async (req, res) => {
+    try {
+        const [carreras] = await require("../config/database").query(`
+            SELECT
+                c.id_carrera,
+                c.nombre,
+                c.descripcion,
+                c.id_categoria,
+                cat.nombre AS categoria
+            FROM carreras c
+            LEFT JOIN categorias cat
+                ON c.id_categoria = cat.id_categoria
+            ORDER BY c.id_carrera ASC
+        `);
+
+        res.json(carreras);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            mensaje: "Error al obtener carreras"
+        });
+
+    }
+};
+
+// ==========================================
+// LISTAR USUARIOS
+// ==========================================
+
+const listarUsuarios = async (req, res) => {
+
+    try {
+
+        const db =
+            require("../config/database");
+
+        const [usuarios] =
+            await db.query(`
+                SELECT
+                    u.id_usuario,
+                    u.nombre,
+                    u.correo,
+                    u.id_rol,
+                    r.nombre AS rol
+                FROM usuarios u
+                LEFT JOIN roles r
+                    ON u.id_rol = r.id_rol
+                ORDER BY u.id_usuario ASC
+            `);
+
+        res.json(usuarios);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            mensaje: "Error al obtener usuarios"
+        });
+
+    }
+
+};
 
 module.exports = {
+
     listarPreguntas,
+    listarCategorias,
+    listarCarreras,
+    listarUsuarios,
     crearPregunta,
     actualizarPregunta,
     eliminarPregunta
+
 };

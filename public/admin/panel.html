@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Panel de Administrador</title>
+    <title>Panel Administrador | Test Vocacional</title>
 
     <link
         rel="stylesheet"
@@ -19,44 +19,376 @@
 
 </head>
 
-<body>
 
-    <main class="admin-container">
+<body class="admin-page">
 
-        <h1>Panel de Administrador</h1>
 
-        <p id="bienvenida">
-            Cargando información...
-        </p>
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
 
-        <div class="admin-menu">
+    <header class="admin-header">
 
-            <button onclick="irPreguntas()">
-                Gestionar preguntas
-            </button>
+        <div class="admin-logo">
 
-            <button onclick="irUsuarios()">
-                Gestionar usuarios
-            </button>
+            <div class="admin-logo-icono">
+                TV
+            </div>
 
-            <button onclick="irAreas()">
-                Gestionar áreas
-            </button>
+            <div class="admin-logo-texto">
 
-            <button onclick="irCarreras()">
-                Gestionar carreras
-            </button>
+                <span>
+                    TEST
+                </span>
+
+                <strong>
+                    VOCACIONAL
+                </strong>
+
+            </div>
 
         </div>
 
-        <button
-            class="logout"
-            onclick="cerrarSesion()"
-        >
-            Cerrar sesión
-        </button>
+
+        <nav class="admin-nav">
+
+            <a
+                href="/index.html"
+                class="admin-nav-link"
+            >
+                Inicio
+            </a>
+
+
+            <a
+                href="/admin/panel.html"
+                class="admin-nav-link activo"
+            >
+                Panel
+            </a>
+
+
+            <button
+                type="button"
+                class="admin-btn-salir"
+                onclick="cerrarSesion()"
+            >
+
+                <span>
+                    ↪
+                </span>
+
+                Cerrar sesión
+
+            </button>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL
+    =========================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- HERO -->
+
+        <section class="admin-hero">
+
+            <div class="admin-etiqueta">
+
+                <span class="admin-punto"></span>
+
+                PANEL ADMINISTRATIVO
+
+            </div>
+
+
+            <h1>
+
+                Panel
+
+                <span>
+                    administrador
+                </span>
+
+            </h1>
+
+
+            <p id="bienvenida">
+
+                Cargando información...
+
+            </p>
+
+
+            <div class="admin-linea"></div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             MENÚ ADMINISTRATIVO
+        ======================================= -->
+
+        <section class="admin-seccion">
+
+            <div class="admin-seccion-titulo">
+
+                <div>
+
+                    <span class="admin-mini-etiqueta">
+                        ADMINISTRACIÓN
+                    </span>
+
+                    <h2>
+                        Gestiona tu plataforma
+                    </h2>
+
+                </div>
+
+
+                <p>
+                    Selecciona una sección para
+                    administrar el contenido del
+                    test vocacional.
+                </p>
+
+            </div>
+
+
+
+            <div class="admin-menu">
+
+
+                <!-- PREGUNTAS -->
+
+                <button
+                    type="button"
+                    class="admin-card admin-card-preguntas"
+                    onclick="irPreguntas()"
+                >
+
+                    <div class="admin-card-icono">
+                        📝
+                    </div>
+
+
+                    <div class="admin-card-contenido">
+
+                        <span class="admin-card-numero">
+                            01
+                        </span>
+
+                        <h3>
+                            Preguntas
+                        </h3>
+
+                        <p>
+                            Administra las preguntas
+                            que forman parte del test
+                            vocacional.
+                        </p>
+
+                    </div>
+
+
+                    <div class="admin-card-flecha">
+                        →
+                    </div>
+
+                </button>
+
+
+
+                <!-- USUARIOS -->
+
+                <button
+                    type="button"
+                    class="admin-card admin-card-usuarios"
+                    onclick="irUsuarios()"
+                >
+
+                    <div class="admin-card-icono">
+                        👥
+                    </div>
+
+
+                    <div class="admin-card-contenido">
+
+                        <span class="admin-card-numero">
+                            02
+                        </span>
+
+                        <h3>
+                            Usuarios
+                        </h3>
+
+                        <p>
+                            Consulta y administra
+                            los usuarios registrados
+                            en la plataforma.
+                        </p>
+
+                    </div>
+
+
+                    <div class="admin-card-flecha">
+                        →
+                    </div>
+
+                </button>
+
+
+
+                <!-- ÁREAS -->
+
+                <button
+                    type="button"
+                    class="admin-card admin-card-areas"
+                    onclick="irAreas()"
+                >
+
+                    <div class="admin-card-icono">
+                        🎯
+                    </div>
+
+
+                    <div class="admin-card-contenido">
+
+                        <span class="admin-card-numero">
+                            03
+                        </span>
+
+                        <h3>
+                            Áreas vocacionales
+                        </h3>
+
+                        <p>
+                            Gestiona las áreas
+                            profesionales utilizadas
+                            por el test.
+                        </p>
+
+                    </div>
+
+
+                    <div class="admin-card-flecha">
+                        →
+                    </div>
+
+                </button>
+
+
+
+                <!-- CARRERAS -->
+
+                <button
+                    type="button"
+                    class="admin-card admin-card-carreras"
+                    onclick="irCarreras()"
+                >
+
+                    <div class="admin-card-icono">
+                        🎓
+                    </div>
+
+
+                    <div class="admin-card-contenido">
+
+                        <span class="admin-card-numero">
+                            04
+                        </span>
+
+                        <h3>
+                            Carreras
+                        </h3>
+
+                        <p>
+                            Administra las carreras
+                            relacionadas con cada
+                            área vocacional.
+                        </p>
+
+                    </div>
+
+
+                    <div class="admin-card-flecha">
+                        →
+                    </div>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             INFORMACIÓN
+        ======================================= -->
+
+        <section class="admin-info">
+
+            <div class="admin-info-icono">
+                ✦
+            </div>
+
+
+            <div>
+
+                <span>
+                    SISTEMA DE TEST VOCACIONAL
+                </span>
+
+                <h2>
+                    Administración del test
+                </h2>
+
+                <p>
+                    Desde este panel puedes administrar
+                    los diferentes elementos que forman
+                    parte de la plataforma.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <div
+            id="mensaje"
+            class="admin-mensaje"
+        ></div>
+
 
     </main>
+
+
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+
+    <footer class="admin-footer">
+
+        <p>
+            © 2026 Test Vocacional Interactivo.
+            Todos los derechos reservados.
+            ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+        </p>
+
+    </footer>
+
+
 
     <script src="/js/admin.js"></script>
 

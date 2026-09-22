@@ -1,9 +1,14 @@
-const conexion = require("../config/database");
+const db = require("../config/database");
 
-const buscarPorCorreo = (correo, callback) => {
+// ==========================================
+// BUSCAR USUARIO POR CORREO
+// ==========================================
 
-    const sql = `
-        SELECT 
+async function buscarPorCorreo(correo) {
+
+    const [filas] = await db.query(
+        `
+        SELECT
             u.id_usuario,
             u.nombre,
             u.correo,
@@ -14,27 +19,44 @@ const buscarPorCorreo = (correo, callback) => {
         INNER JOIN roles r
             ON u.id_rol = r.id_rol
         WHERE u.correo = ?
-    `;
+        `,
+        [correo]
+    );
 
-    conexion.query(sql, [correo], callback);
-};
+    return filas;
+}
 
 
-const crearUsuario = (nombre, correo, password, callback) => {
+// ==========================================
+// CREAR USUARIO
+// ==========================================
 
-    const sql = `
+async function crearUsuario(
+    nombre,
+    correo,
+    password
+) {
+
+    const [resultado] = await db.query(
+        `
         INSERT INTO usuarios
         (nombre, correo, password, id_rol)
-        VALUES (?, ?, ?, 1)
-    `;
-
-    conexion.query(
-        sql,
-        [nombre, correo, password],
-        callback
+        VALUES (?, ?, ?, 2)
+        `,
+        [
+            nombre,
+            correo,
+            password
+        ]
     );
-};
 
+    return resultado;
+}
+
+
+// ==========================================
+// EXPORTAR
+// ==========================================
 
 module.exports = {
     buscarPorCorreo,

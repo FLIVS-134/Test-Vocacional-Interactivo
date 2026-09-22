@@ -1,62 +1,265 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Gestionar preguntas</title>
+<title>Preguntas | Panel Administrador</title>
 
-    <link
-        rel="stylesheet"
-        href="/css/estilos.css"
-    >
+<link
+    rel="stylesheet"
+    href="/css/estilos.css"
+>
+```
 
 </head>
 
 <body>
 
-    <main class="admin-container">
+<header class="inicio-header">
 
-        <h1>Gestionar preguntas</h1>
+```
+<div class="inicio-logo">
 
-        <form id="preguntaForm">
+    <div class="inicio-logo-icono">
+        TV
+    </div>
 
-            <input
-                type="text"
-                id="pregunta"
-                placeholder="Escribe una pregunta"
-                required
+    <span class="inicio-nombre">
+        Test Vocacional
+    </span>
+
+</div>
+
+
+<nav class="inicio-nav">
+
+    <a href="/index.html">
+        Inicio
+    </a>
+
+    <a href="/admin/panel.html">
+        Panel
+    </a>
+
+    <a href="/admin/preguntas.html">
+        Preguntas
+    </a>
+
+    <button
+        type="button"
+        class="btn-login"
+        onclick="cerrarSesion()"
+    >
+        Cerrar sesión
+    </button>
+
+</nav>
+```
+
+</header>
+
+<main>
+
+```
+<section class="admin-container">
+
+
+    <!-- ======================================
+         ENCABEZADO
+    ======================================= -->
+
+    <div class="test-header">
+
+        <div class="hero-etiqueta">
+            ADMINISTRACIÓN
+        </div>
+
+        <h1>
+            Gestionar <span>preguntas</span>
+        </h1>
+
+        <p>
+            Administra las preguntas que forman
+            parte del test vocacional.
+        </p>
+
+    </div>
+
+
+
+    <!-- ======================================
+         BOTONES PRINCIPALES
+    ======================================= -->
+
+    <div class="botones-test">
+
+        <button
+            type="button"
+            class="btn-test btn-principal"
+            id="btnNuevaPregunta"
+        >
+            + Nueva pregunta
+        </button>
+
+
+        <button
+            type="button"
+            class="btn-test btn-secundario"
+            onclick="window.location.href='/admin/panel.html'"
+        >
+            Volver al panel
+        </button>
+
+    </div>
+
+
+
+    <!-- ======================================
+         FORMULARIO
+    ======================================= -->
+
+    <div
+        id="formularioPregunta"
+        style="display: none; margin-top: 30px;"
+    >
+
+
+        <div class="pregunta">
+
+
+            <!-- TEXTO DE LA PREGUNTA -->
+
+            <label for="textoPregunta">
+                Texto de la pregunta
+            </label>
+
+
+            <textarea
+                id="textoPregunta"
+                name="textoPregunta"
+                rows="4"
+                placeholder="Escribe aquí la pregunta..."
+            ></textarea>
+
+
+
+            <!-- CATEGORÍA -->
+
+            <label
+                for="categoriaPregunta"
+                style="display: block; margin-top: 20px;"
+            >
+                Categoría
+            </label>
+
+
+            <select
+                id="categoriaPregunta"
+                name="categoriaPregunta"
             >
 
-            <button type="submit">
-                Agregar pregunta
+                <option value="">
+                    Selecciona una categoría
+                </option>
+
+            </select>
+
+
+        </div>
+
+
+
+        <!-- BOTONES DEL FORMULARIO -->
+
+        <div class="botones-test">
+
+            <button
+                type="button"
+                class="btn-test btn-principal"
+                id="btnGuardarPregunta"
+            >
+                Guardar pregunta
             </button>
 
-        </form>
 
-        <p id="mensaje"></p>
+            <button
+                type="button"
+                class="btn-test btn-secundario"
+                id="btnCancelarPregunta"
+            >
+                Cancelar
+            </button>
 
-        <hr>
+        </div>
 
-        <h2>Preguntas registradas</h2>
 
-        <div id="listaPreguntas"></div>
+    </div>
 
-        <br>
 
-        <a href="/admin/panel.html">
-            Volver al panel
-        </a>
 
-    </main>
+    <!-- ======================================
+         MENSAJE
+    ======================================= -->
 
-    <script src="/js/preguntas.js"></script>
+    <div
+        id="mensaje"
+        style="margin-top: 25px;"
+    ></div>
+
+
+
+    <!-- ======================================
+         LISTA DE PREGUNTAS
+    ======================================= -->
+
+    <div
+        id="listaPreguntas"
+        style="margin-top: 35px;"
+    >
+
+        <div class="pregunta">
+
+            <h3>
+                Preguntas registradas
+            </h3>
+
+            <p>
+                Las preguntas registradas aparecerán
+                aquí cuando se conecte la base de datos.
+            </p>
+
+        </div>
+
+    </div>
+
+
+</section>
+```
+
+</main>
+
+<footer class="footer">
+
+```
+<p>
+    © 2026 Test Vocacional Interactivo.
+    Todos los derechos reservados.
+    ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+</p>
+```
+
+</footer>
+
+<script src="/js/preguntas.js"></script>
 
 </body>
 
