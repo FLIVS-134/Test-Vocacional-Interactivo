@@ -6,59 +6,63 @@ const db = require("../config/database");
 
 async function buscarPorCorreo(correo) {
 
-    const [filas] = await db.query(
-        `
-        SELECT
-            u.id_usuario,
-            u.nombre,
-            u.correo,
-            u.password,
-            u.id_rol,
-            r.nombre AS rol
-        FROM usuarios u
-        INNER JOIN roles r
-            ON u.id_rol = r.id_rol
-        WHERE u.correo = ?
-        `,
-        [correo]
-    );
+const [filas] = await db.query(
+    `
+    SELECT
+        u.id_usuario,
+        u.nombre,
+        u.apellido,
+        u.correo,
+        u.password,
+        u.id_rol,
+        r.nombre AS rol
+    FROM usuarios u
+    INNER JOIN roles r
+        ON u.id_rol = r.id_rol
+    WHERE u.correo = ?
+    `,
+    [correo]
+);
 
-    return filas;
+return filas;
+
 }
-
 
 // ==========================================
 // CREAR USUARIO
 // ==========================================
 
 async function crearUsuario(
-    nombre,
-    correo,
-    password
+nombre,
+correo,
+password
 ) {
 
-    const [resultado] = await db.query(
-        `
-        INSERT INTO usuarios
-        (nombre, correo, password, id_rol)
-        VALUES (?, ?, ?, 2)
-        `,
-        [
-            nombre,
-            correo,
-            password
-        ]
-    );
+const apellido = "";
 
-    return resultado;
+const [resultado] = await db.query(
+    `
+    INSERT INTO usuarios
+    (nombre, apellido, correo, password, id_rol)
+    VALUES (?, ?, ?, ?, 2)
+    `,
+    [
+        nombre,
+        apellido,
+        correo,
+        password
+    ]
+);
+
+return resultado;
+
 }
-
 
 // ==========================================
 // EXPORTAR
 // ==========================================
 
 module.exports = {
-    buscarPorCorreo,
-    crearUsuario
+buscarPorCorreo,
+crearUsuario
 };

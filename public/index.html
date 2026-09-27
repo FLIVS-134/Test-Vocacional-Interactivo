@@ -16,7 +16,9 @@
 <body>
 
     <!-- =========================================
-     ENCABEZADO
+ ENCABEZADO
+```
+
 ========================================== -->
 
     <header class="inicio-header">
@@ -44,7 +46,9 @@
 
 
     <!-- =========================================
-     SECCIÓN PRINCIPAL
+ SECCIÓN PRINCIPAL
+```
+
 ========================================== -->
 
     <main>
@@ -114,8 +118,8 @@
 
 
         <!-- =========================================
-         ¿CÓMO FUNCIONA?
-    ========================================== -->
+     ¿CÓMO FUNCIONA?
+========================================== -->
 
         <section class="como-funciona" id="como-funciona">
 
@@ -196,8 +200,8 @@
 
 
         <!-- =========================================
-         BENEFICIOS
-    ========================================== -->
+     BENEFICIOS
+========================================== -->
 
         <section class="beneficios" id="beneficios">
 
@@ -278,8 +282,8 @@
 
 
         <!-- =========================================
-         LLAMADO A LA ACCIÓN
-    ========================================== -->
+     LLAMADO A LA ACCIÓN
+========================================== -->
 
         <section class="cta">
 
@@ -307,14 +311,14 @@
 
 
     <!-- =========================================
-     FOOTER
-========================================== -->
+ FOOTER
+```
 
+========================================== -->
     <footer class="footer">
 
         <div class="footer-logo">
-            <strong>TV</strong>
-            <span>Test Vocacional Interactivo</span>
+            <img src="/img/logo.png" alt="Test Vocacional Interactivo">
         </div>
 
         <p>
@@ -327,6 +331,220 @@
         </p>
 
     </footer>
+
+
+    <!-- =========================================
+     FLIVS - ASISTENTE VOCACIONAL
+========================================== -->
+
+    <button id="flivs-boton" class="flivs-boton" aria-label="Abrir FLIVS">
+        <img src="/img/logo.png" alt="FLIVS">
+    </button>
+
+
+    <div id="flivs-chat" class="flivs-chat">
+
+        <div class="flivs-header">
+
+            <div class="flivs-header-info">
+
+                <img src="/img/logo.png" alt="FLIVS">
+
+                <div>
+                    <strong>FLIVS</strong>
+                    <span>Asistente vocacional</span>
+                </div>
+
+            </div>
+
+            <button id="flivs-cerrar" class="flivs-cerrar" aria-label="Cerrar FLIVS">
+                ×
+            </button>
+
+        </div>
+
+
+        <div id="flivs-mensajes" class="flivs-mensajes">
+
+            <div class="flivs-mensaje flivs-bot">
+                Hola 👋 Soy FLIVS.<br><br>
+                Puedo ayudarte con preguntas sobre carreras, universidades,
+                diferencias entre carreras y orientación académica.
+                <br><br>
+                ¿Qué quieres saber?
+            </div>
+
+        </div>
+
+
+        <div class="flivs-escribiendo" id="flivs-escribiendo">
+            FLIVS está escribiendo...
+        </div>
+
+
+        <form id="flivs-form" class="flivs-form">
+
+            <input type="text" id="flivs-input" placeholder="Escribe tu pregunta..." autocomplete="off" required>
+
+            <button type="submit">
+                ➤
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================================
+     JAVASCRIPT DE FLIVS
+========================================== -->
+
+    <script>
+
+        const flivsBoton = document.getElementById("flivs-boton");
+        const flivsChat = document.getElementById("flivs-chat");
+        const flivsCerrar = document.getElementById("flivs-cerrar");
+
+        const flivsForm = document.getElementById("flivs-form");
+        const flivsInput = document.getElementById("flivs-input");
+        const flivsMensajes = document.getElementById("flivs-mensajes");
+        const flivsEscribiendo = document.getElementById("flivs-escribiendo");
+
+
+        // Abrir FLIVS
+
+        flivsBoton.addEventListener("click", () => {
+
+            flivsChat.classList.add("flivs-chat-visible");
+
+            flivsInput.focus();
+
+        });
+
+
+        // Cerrar FLIVS
+
+        flivsCerrar.addEventListener("click", () => {
+
+            flivsChat.classList.remove("flivs-chat-visible");
+
+        });
+
+
+        // Agregar mensaje a la conversación
+
+        function agregarMensaje(texto, tipo) {
+
+            const mensaje = document.createElement("div");
+
+            mensaje.classList.add(
+                "flivs-mensaje",
+                tipo === "usuario"
+                    ? "flivs-usuario"
+                    : "flivs-bot"
+            );
+
+            if (tipo === "bot") {
+
+                let textoFormateado = texto
+                    // Negrita: **texto**
+                    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+
+                    // Cursiva: *texto*
+                    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+
+                    // Saltos de línea
+                    .replace(/\n/g, "<br>");
+
+                mensaje.innerHTML = textoFormateado;
+
+            } else {
+
+                mensaje.textContent = texto;
+
+            }
+
+            flivsMensajes.appendChild(mensaje);
+
+            flivsMensajes.scrollTop = flivsMensajes.scrollHeight;
+        }
+
+
+        // Enviar pregunta
+
+        flivsForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const mensaje = flivsInput.value.trim();
+
+            if (!mensaje) {
+                return;
+            }
+
+
+            // Mostrar mensaje del usuario
+
+            agregarMensaje(mensaje, "usuario");
+
+            flivsInput.value = "";
+
+            flivsEscribiendo.classList.add("flivs-escribiendo-visible");
+
+
+            try {
+
+                const respuesta = await fetch("/api/flivs/preguntar", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        mensaje: mensaje
+                    })
+
+                });
+
+
+                const datos = await respuesta.json();
+
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        datos.error || "No fue posible obtener una respuesta."
+                    );
+
+                }
+
+
+                agregarMensaje(
+                    datos.respuesta,
+                    "bot"
+                );
+
+
+            } catch (error) {
+
+                console.error("Error al comunicarse con FLIVS:", error);
+
+                agregarMensaje(
+                    "Lo siento, no pude responder en este momento. Intenta nuevamente.",
+                    "bot"
+                );
+
+            } finally {
+
+                flivsEscribiendo.classList.remove("flivs-escribiendo-visible");
+
+            }
+
+        });
+
+    </script>
 
 </body>
 

@@ -37,6 +37,9 @@ const testRoutes = require("./routes/testRoutes");
 app.use("/api/test", testRoutes);
 console.log("✅ TEST ROUTES MONTADO EN /api/test");
 
+const flivsRoutes = require("./routes/flivsRoutes");
+app.use("/api/flivs", flivsRoutes);
+
 app.use((err, req, res, next) => {
     console.error("Error global:", err);
     res.status(500).json({

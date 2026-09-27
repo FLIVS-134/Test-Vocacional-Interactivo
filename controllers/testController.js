@@ -16,7 +16,7 @@ const obtenerPreguntas = async (req, res) => {
                 p.id_categoria,
                 c.nombre AS categoria,
                 o.id_opcion,
-                o.texto_opcion,
+                o.texto_opcion AS texto,
                 o.valor
             FROM preguntas p
 
@@ -81,8 +81,8 @@ const obtenerPreguntas = async (req, res) => {
                 id_opcion:
                     fila.id_opcion,
 
-                texto_opcion:
-                    fila.texto_opcion,
+                texto:
+                    fila.texto,
 
                 valor:
                     fila.valor
