@@ -1,3 +1,8 @@
+// =====================================================
+// TEST VOCACIONAL INTERACTIVO
+// JavaScript del test
+// =====================================================
+
 const preguntasContainer =
     document.getElementById("preguntasContainer");
 
@@ -23,6 +28,10 @@ const resultadoTexto =
     document.getElementById("resultadoTexto");
 
 
+// =====================================================
+// VARIABLES DEL TEST
+// =====================================================
+
 let preguntas = [];
 
 let respuestas = {};
@@ -39,50 +48,16 @@ async function cargarPreguntas() {
     try {
 
         const respuesta =
-            await fetch(
-                "/api/test/preguntas"
-            );
-
+            await fetch("/api/test/preguntas");
 
         if (!respuesta.ok) {
-
-            const errorTexto =
-                await respuesta.text();
-
-            console.error(
-                "Error al cargar preguntas:",
-                respuesta.status,
-                errorTexto
+            throw new Error(
+                "No se pudieron cargar las preguntas."
             );
-
-            mensaje.textContent =
-                "No se pudieron cargar las preguntas.";
-
-            mensaje.className =
-                "mensaje-error";
-
-            return;
-
         }
-
-
-        // =============================================
-        // GUARDAR LAS PREGUNTAS RECIBIDAS
-        // =============================================
 
         preguntas =
             await respuesta.json();
-
-
-        console.log(
-            "PREGUNTAS CARGADAS:",
-            preguntas
-        );
-
-
-        // =============================================
-        // VERIFICAR QUE SÍ HAY PREGUNTAS
-        // =============================================
 
         if (
             !preguntas ||
@@ -92,37 +67,21 @@ async function cargarPreguntas() {
             mensaje.textContent =
                 "No hay preguntas disponibles.";
 
-            mensaje.className =
-                "mensaje-error";
-
             return;
-
         }
 
-
-        // =============================================
-        // MOSTRAR LA PRIMERA PREGUNTA
-        // =============================================
-
         mostrarPregunta();
-
 
     } catch (error) {
 
         console.error(
-            "Error al cargar preguntas:",
+            "Error al cargar las preguntas:",
             error
         );
 
-
         mensaje.textContent =
-            "No se pudieron cargar las preguntas. Intenta nuevamente.";
-
-        mensaje.className =
-            "mensaje-error";
-
+            "Ocurrió un error al cargar el test.";
     }
-
 }
 
 
@@ -132,118 +91,67 @@ async function cargarPreguntas() {
 
 function mostrarPregunta() {
 
-    preguntasContainer.innerHTML = "";
-
-    mensaje.textContent = "";
-
-    mensaje.className = "";
-
+    if (
+        !preguntas ||
+        preguntas.length === 0
+    ) {
+        return;
+    }
 
     const pregunta =
         preguntas[preguntaActual];
 
-
-    if (!pregunta) {
-
-        return;
-
-    }
+    preguntasContainer.innerHTML = "";
 
 
-    const tarjeta =
-        document.createElement("div");
-
-    tarjeta.className =
-        "pregunta";
-
-
-    const titulo =
+    const preguntaTitulo =
         document.createElement("h3");
 
-
-    titulo.textContent =
+    preguntaTitulo.textContent =
         `${preguntaActual + 1}. ${pregunta.pregunta}`;
 
-
-    tarjeta.appendChild(
-        titulo
+    preguntasContainer.appendChild(
+        preguntaTitulo
     );
 
 
-    if (pregunta.categoria) {
+    // =================================================
+    // OPCIONES
+    // =================================================
 
-        const categoria =
-            document.createElement("p");
-
-        categoria.className =
-            "categoria-pregunta";
-
-        categoria.textContent =
-            `Área: ${pregunta.categoria}`;
-
-        tarjeta.appendChild(
-            categoria
-        );
-
-    }
-
-
-    const opciones =
+    const opcionesContainer =
         document.createElement("div");
 
-    opciones.className =
-        "opciones";
+    opcionesContainer.className =
+        "opciones-container";
 
 
     if (
-        !pregunta.opciones ||
-        pregunta.opciones.length === 0
+        pregunta.opciones &&
+        pregunta.opciones.length > 0
     ) {
-
-        const error =
-            document.createElement("p");
-
-        error.textContent =
-            "Esta pregunta no tiene opciones disponibles.";
-
-        error.className =
-            "mensaje-error";
-
-        opciones.appendChild(
-            error
-        );
-
-    } else {
 
         pregunta.opciones.forEach(
             opcion => {
 
-                const contenedor =
-                    document.createElement("div");
+                const label =
+                    document.createElement("label");
 
-
-                contenedor.className =
+                label.className =
                     "opcion";
 
 
-                const input =
+                const radio =
                     document.createElement("input");
 
-
-                input.type =
+                radio.type =
                     "radio";
 
+                radio.name =
+                    "respuesta";
 
-                input.name =
-                    `pregunta_${pregunta.id_pregunta}`;
-
-
-                input.value =
+                radio.value =
                     opcion.id_opcion;
-
-
-                input.id =
-                    `pregunta_${pregunta.id_pregunta}_${opcion.id_opcion}`;
 
 
                 if (
@@ -251,142 +159,124 @@ function mostrarPregunta() {
                     opcion.id_opcion
                 ) {
 
-                    input.checked = true;
-
+                    radio.checked =
+                        true;
                 }
 
 
-                const label =
-                    document.createElement("label");
-
-
-                label.htmlFor =
-                    input.id;
-
-
-                label.textContent =
-                    opcion.texto_opcion;
-
-
-                input.addEventListener(
+                radio.addEventListener(
                     "change",
-                    () => {
+                    function () {
 
                         respuestas[
                             pregunta.id_pregunta
                         ] =
-                            Number(
-                                input.value
-                            );
+                            this.value;
 
                     }
                 );
 
 
-                contenedor.appendChild(
-                    input
+                label.appendChild(
+                    radio
                 );
 
 
-                contenedor.appendChild(
+                const texto =
+                    document.createElement("span");
+
+                texto.textContent =
+                    opcion.texto;
+
+
+                label.appendChild(
+                    texto
+                );
+
+
+                opcionesContainer.appendChild(
                     label
                 );
-
-
-                opciones.appendChild(
-                    contenedor
-                );
-
             }
         );
 
+    } else {
+
+        const sinOpciones =
+            document.createElement("p");
+
+        sinOpciones.textContent =
+            "Esta pregunta no tiene opciones disponibles.";
+
+        opcionesContainer.appendChild(
+            sinOpciones
+        );
     }
-
-
-    tarjeta.appendChild(
-        opciones
-    );
 
 
     preguntasContainer.appendChild(
-        tarjeta
+        opcionesContainer
     );
 
 
-    actualizarProgreso();
-
-    actualizarBotones();
-
-}
-
-
-// =====================================================
-// ACTUALIZAR PROGRESO
-// =====================================================
-
-function actualizarProgreso() {
-
-    const total =
-        preguntas.length;
-
-
-    if (total === 0) {
-
-        return;
-
-    }
-
+    // =================================================
+    // ACTUALIZAR PROGRESO
+    // =================================================
 
     const porcentaje =
-        ((preguntaActual + 1) / total) * 100;
+        ((preguntaActual + 1) /
+            preguntas.length) *
+        100;
 
 
-    progreso.style.width =
-        `${porcentaje}%`;
+    if (progreso) {
 
-
-    progresoTexto.textContent =
-        `${Math.round(porcentaje)}%`;
-
-}
-
-
-// =====================================================
-// ACTUALIZAR BOTONES
-// =====================================================
-
-function actualizarBotones() {
-
-    if (
-        preguntaActual === 0
-    ) {
-
-        btnAnterior.style.display =
-            "none";
-
-    } else {
-
-        btnAnterior.style.display =
-            "block";
-
+        progreso.style.width =
+            `${porcentaje}%`;
     }
 
 
-    if (
-        preguntaActual ===
-        preguntas.length - 1
-    ) {
+    if (progresoTexto) {
 
-        btnSiguiente.textContent =
-            "Finalizar test";
-
-    } else {
-
-        btnSiguiente.textContent =
-            "Siguiente";
-
+        progresoTexto.textContent =
+            `Pregunta ${preguntaActual + 1} de ${preguntas.length}`;
     }
 
+
+    // =================================================
+    // BOTÓN ANTERIOR
+    // =================================================
+
+    if (btnAnterior) {
+
+        btnAnterior.disabled =
+            preguntaActual === 0;
+    }
+
+
+    // =================================================
+    // BOTÓN SIGUIENTE
+    // =================================================
+
+    if (btnSiguiente) {
+
+        if (
+            preguntaActual ===
+            preguntas.length - 1
+        ) {
+
+            btnSiguiente.textContent =
+                "Finalizar test";
+
+        } else {
+
+            btnSiguiente.textContent =
+                "Siguiente";
+        }
+    }
+
+
+    mensaje.textContent = "";
 }
 
 
@@ -394,81 +284,212 @@ function actualizarBotones() {
 // BOTÓN ANTERIOR
 // =====================================================
 
-btnAnterior.addEventListener(
-    "click",
-    () => {
+if (btnAnterior) {
 
-        if (
-            preguntaActual > 0
-        ) {
+    btnAnterior.addEventListener(
+        "click",
+        function () {
 
-            preguntaActual--;
+            if (preguntaActual > 0) {
 
-            mostrarPregunta();
+                preguntaActual--;
 
+                mostrarPregunta();
+            }
         }
-
-    }
-);
+    );
+}
 
 
 // =====================================================
 // BOTÓN SIGUIENTE
 // =====================================================
 
-btnSiguiente.addEventListener(
-    "click",
-    () => {
+if (btnSiguiente) {
 
-        const pregunta =
-            preguntas[preguntaActual];
+    btnSiguiente.addEventListener(
+        "click",
+        function () {
+
+            const pregunta =
+                preguntas[preguntaActual];
 
 
-        if (!pregunta) {
+            // Verificar que haya respuesta
 
-            return;
+            if (
+                !respuestas[
+                    pregunta.id_pregunta
+                ]
+            ) {
 
+                mensaje.textContent =
+                    "Por favor selecciona una respuesta antes de continuar.";
+
+                return;
+            }
+
+
+            // Si todavía hay preguntas
+
+            if (
+                preguntaActual <
+                preguntas.length - 1
+            ) {
+
+                preguntaActual++;
+
+                mostrarPregunta();
+
+            } else {
+
+                enviarRespuestas();
+            }
         }
-
-
-        if (
-            !respuestas[
-                pregunta.id_pregunta
-            ]
-        ) {
-
-            mensaje.textContent =
-                "Selecciona una respuesta antes de continuar.";
-
-            mensaje.className =
-                "mensaje-error";
-
-            return;
-
-        }
-
-
-        if (
-            preguntaActual <
-            preguntas.length - 1
-        ) {
-
-            preguntaActual++;
-
-            mostrarPregunta();
-
-        } else {
-
-            enviarRespuestas();
-
-        }
-
-    }
-);
+    );
+}
 
 
 // =====================================================
-// MOSTRAR CARRERAS RECOMENDADAS
+// ENVIAR RESPUESTAS
+// =====================================================
+
+async function enviarRespuestas() {
+
+    try {
+
+        btnSiguiente.disabled =
+            true;
+
+        btnAnterior.disabled =
+            true;
+
+
+        mensaje.textContent =
+            "Estamos analizando tus respuestas...";
+
+
+        const respuesta =
+            await fetch(
+                "/api/test/respuestas",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        respuestas: respuestas
+                    })
+                }
+            );
+
+
+        if (!respuesta.ok) {
+
+            throw new Error(
+                "No se pudieron enviar las respuestas."
+            );
+        }
+
+
+        const datos =
+            await respuesta.json();
+
+
+        console.log(
+            "RESULTADO COMPLETO DEL TEST:",
+            datos
+        );
+
+
+        // =============================================
+        // OCULTAR TEST
+        // =============================================
+
+        preguntasContainer.style.display =
+            "none";
+
+
+        if (progreso) {
+
+            progreso.parentElement.style.display =
+                "none";
+        }
+
+
+        if (progresoTexto) {
+
+            progresoTexto.style.display =
+                "none";
+        }
+
+
+        const botonesTest =
+            document.querySelector(
+                ".botones-test"
+            );
+
+
+        if (botonesTest) {
+
+            botonesTest.style.display =
+                "none";
+        }
+
+
+        mensaje.textContent = "";
+
+
+        // =============================================
+        // MOSTRAR RESULTADO
+        // =============================================
+
+        resultadoContainer.style.display =
+            "block";
+
+
+        resultadoTexto.innerHTML =
+            `
+            Tu área vocacional principal es:
+            <strong>${datos.categoriaPrincipal.nombre}</strong>
+            `;
+
+
+        // =============================================
+        // MOSTRAR CARRERAS
+        // =============================================
+
+        mostrarCarreras(
+            datos.carreras
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error al enviar las respuestas:",
+            error
+        );
+
+
+        mensaje.textContent =
+            "Ocurrió un error al procesar tu resultado.";
+
+
+        btnSiguiente.disabled =
+            false;
+
+        btnAnterior.disabled =
+            false;
+    }
+}
+
+
+// =====================================================
+// MOSTRAR CARRERAS
 // =====================================================
 
 function mostrarCarreras(carreras) {
@@ -482,15 +503,16 @@ function mostrarCarreras(carreras) {
     if (contenedorAnterior) {
 
         contenedorAnterior.remove();
-
     }
 
 
     const contenedor =
         document.createElement("div");
 
+
     contenedor.id =
         "carrerasRecomendadas";
+
 
     contenedor.className =
         "resultado-carreras";
@@ -498,6 +520,7 @@ function mostrarCarreras(carreras) {
 
     const titulo =
         document.createElement("h3");
+
 
     titulo.textContent =
         "🎓 Carreras recomendadas";
@@ -516,17 +539,21 @@ function mostrarCarreras(carreras) {
         const mensajeCarreras =
             document.createElement("p");
 
+
         mensajeCarreras.textContent =
-            "No encontramos carreras asociadas a esta área.";
+            "No encontramos carreras recomendadas.";
+
 
         contenedor.appendChild(
             mensajeCarreras
         );
 
+
     } else {
 
         const lista =
             document.createElement("div");
+
 
         lista.className =
             "lista-carreras";
@@ -538,12 +565,14 @@ function mostrarCarreras(carreras) {
                 const tarjeta =
                     document.createElement("div");
 
+
                 tarjeta.className =
                     "carrera-item";
 
 
                 const nombre =
                     document.createElement("h4");
+
 
                 nombre.textContent =
                     carrera.nombre;
@@ -561,6 +590,7 @@ function mostrarCarreras(carreras) {
                     const descripcion =
                         document.createElement("p");
 
+
                     descripcion.textContent =
                         carrera.descripcion;
 
@@ -568,14 +598,12 @@ function mostrarCarreras(carreras) {
                     tarjeta.appendChild(
                         descripcion
                     );
-
                 }
 
 
                 lista.appendChild(
                     tarjeta
                 );
-
             }
         );
 
@@ -583,186 +611,17 @@ function mostrarCarreras(carreras) {
         contenedor.appendChild(
             lista
         );
-
     }
 
 
     resultadoContainer.appendChild(
         contenedor
     );
-
 }
 
 
 // =====================================================
-// ENVIAR RESPUESTAS
-// =====================================================
-
-async function enviarRespuestas() {
-
-    btnSiguiente.disabled =
-        true;
-
-    btnAnterior.disabled =
-        true;
-
-
-    mensaje.textContent =
-        "Guardando tus respuestas...";
-
-    mensaje.className = "";
-
-
-    try {
-
-        const respuesta =
-            await fetch(
-                "/api/test/respuestas",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        respuestas:
-                            respuestas
-                    })
-                }
-            );
-
-
-        const datos =
-            await respuesta.json();
-
-
-        console.log(
-            "RESULTADO GUARDADO:",
-            datos
-        );
-
-
-        if (
-            respuesta.status === 401
-        ) {
-
-            window.location.href =
-                "/login.html";
-
-            return;
-
-        }
-
-
-        if (!respuesta.ok) {
-
-            throw new Error(
-                datos.mensaje ||
-                "No se pudieron guardar las respuestas"
-            );
-
-        }
-
-
-        preguntasContainer.style.display =
-            "none";
-
-
-        const progresoContenedor =
-            document.querySelector(
-                ".progreso-contenedor"
-            );
-
-
-        if (progresoContenedor) {
-
-            progresoContenedor.style.display =
-                "none";
-
-        }
-
-
-        const botonesTest =
-            document.querySelector(
-                ".botones-test"
-            );
-
-
-        if (botonesTest) {
-
-            botonesTest.style.display =
-                "none";
-
-        }
-
-
-        resultadoContainer.style.display =
-            "block";
-
-
-        // =============================================
-        // MOSTRAR ÁREA PRINCIPAL
-        // =============================================
-
-        if (
-            datos.categoriaPrincipal
-        ) {
-
-            resultadoTexto.textContent =
-                `Tu área principal es ${datos.categoriaPrincipal.nombre}, con un puntaje de ${datos.categoriaPrincipal.puntaje} puntos.`;
-
-        } else {
-
-            resultadoTexto.textContent =
-                "Hemos registrado tus respuestas correctamente.";
-
-        }
-
-
-        // =============================================
-        // MOSTRAR CARRERAS
-        // =============================================
-
-        mostrarCarreras(
-            datos.carreras
-        );
-
-
-        mensaje.textContent = "";
-
-
-    } catch (error) {
-
-        console.error(
-            "Error al guardar respuestas:",
-            error
-        );
-
-
-        mensaje.textContent =
-            error.message ||
-            "Ocurrió un error al enviar tus respuestas.";
-
-
-        mensaje.className =
-            "mensaje-error";
-
-
-        btnSiguiente.disabled =
-            false;
-
-        btnAnterior.disabled =
-            false;
-
-    }
-
-}
-
-
-// =====================================================
-// COMPROBAR SI EL USUARIO YA TIENE UN RESULTADO
+// COMPROBAR RESULTADO GUARDADO
 // =====================================================
 
 async function comprobarResultadoGuardado() {
@@ -775,25 +634,9 @@ async function comprobarResultadoGuardado() {
             );
 
 
-        if (respuesta.status === 401) {
-
-            window.location.href =
-                "/login.html";
-
-            return;
-
-        }
-
-
         if (!respuesta.ok) {
 
-            // Si ocurre algún problema,
-            // permitimos hacer el test normalmente.
-
-            cargarPreguntas();
-
             return;
-
         }
 
 
@@ -801,43 +644,23 @@ async function comprobarResultadoGuardado() {
             await respuesta.json();
 
 
-        // =============================================
-        // NO TIENE RESULTADO
-        // =============================================
+        if (
+            datos.tieneResultado
+        ) {
 
-        if (!datos.tieneResultado) {
-
-            cargarPreguntas();
-
-            return;
-
+            mostrarResultadoGuardado(
+                datos
+            );
         }
-
-
-        // =============================================
-        // YA TIENE RESULTADO
-        // =============================================
-
-        mostrarResultadoGuardado(
-            datos
-        );
 
 
     } catch (error) {
 
         console.error(
-            "Error al comprobar resultado:",
+            "Error al comprobar resultado guardado:",
             error
         );
-
-
-        // Si falla la comprobación,
-        // dejamos que pueda hacer el test.
-
-        cargarPreguntas();
-
     }
-
 }
 
 
@@ -845,23 +668,44 @@ async function comprobarResultadoGuardado() {
 // MOSTRAR RESULTADO GUARDADO
 // =====================================================
 
-function mostrarResultadoGuardado(datos) {
+function mostrarResultadoGuardado(
+    datos
+) {
+
+    if (
+        !datos ||
+        !datos.tieneResultado
+    ) {
+
+        return;
+    }
+
+
+    console.log(
+        "RESULTADO GUARDADO:",
+        datos
+    );
+
+
+    // =============================================
+    // OCULTAR TEST
+    // =============================================
 
     preguntasContainer.style.display =
         "none";
 
 
-    const progresoContenedor =
-        document.querySelector(
-            ".progreso-contenedor"
-        );
+    if (progreso) {
 
-
-    if (progresoContenedor) {
-
-        progresoContenedor.style.display =
+        progreso.parentElement.style.display =
             "none";
+    }
 
+
+    if (progresoTexto) {
+
+        progresoTexto.style.display =
+            "none";
     }
 
 
@@ -875,31 +719,25 @@ function mostrarResultadoGuardado(datos) {
 
         botonesTest.style.display =
             "none";
-
     }
 
+
+    mensaje.textContent = "";
+
+
+    // =============================================
+    // MOSTRAR RESULTADO
+    // =============================================
 
     resultadoContainer.style.display =
         "block";
 
 
-    // =============================================
-    // MOSTRAR ÁREA PRINCIPAL
-    // =============================================
-
-    if (
-        datos.categoriaPrincipal
-    ) {
-
-        resultadoTexto.textContent =
-            `Tu área principal es ${datos.categoriaPrincipal.nombre}, con un puntaje de ${datos.categoriaPrincipal.puntaje} puntos.`;
-
-    } else {
-
-        resultadoTexto.textContent =
-            "Tu resultado vocacional está guardado.";
-
-    }
+    resultadoTexto.innerHTML =
+        `
+        Tu área vocacional principal es:
+        <strong>${datos.categoriaPrincipal.nombre}</strong>
+        `;
 
 
     // =============================================
@@ -909,15 +747,18 @@ function mostrarResultadoGuardado(datos) {
     mostrarCarreras(
         datos.carreras
     );
-
-
-    mensaje.textContent = "";
-
 }
 
 
 // =====================================================
 // INICIAR TEST
+// =====================================================
+
+cargarPreguntas();
+
+
+// =====================================================
+// COMPROBAR SI YA EXISTE UN RESULTADO
 // =====================================================
 
 comprobarResultadoGuardado();

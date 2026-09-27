@@ -6,133 +6,131 @@ document.getElementById("mensaje");
 
 if (formulario) {
 
-formulario.addEventListener(
-    "submit",
-    async (event) => {
+    // ==========================================
+    // LIMPIAR FORMULARIO AL ENTRAR
+    // ==========================================
 
-        event.preventDefault();
+    formulario.reset();
 
+    // ==========================================
+    // REGISTRO DE USUARIO
+    // ==========================================
 
-        const nombre =
-            document.getElementById(
-                "nombre"
-            ).value.trim();
+    formulario.addEventListener(
+        "submit",
+        async (event) => {
 
-        const correo =
-            document.getElementById(
-                "correo"
-            ).value.trim();
+            event.preventDefault();
 
-        const password =
-            document.getElementById(
-                "password"
-            ).value;
+            const nombre =
+                document.getElementById(
+                    "nombre"
+                ).value.trim();
 
-        const confirmarPassword =
-            document.getElementById(
-                "confirmarPassword"
-            ).value;
+            const correo =
+                document.getElementById(
+                    "correo"
+                ).value.trim();
 
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
 
-        mensaje.textContent = "";
+            const confirmarPassword =
+                document.getElementById(
+                    "confirmarPassword"
+                ).value;
 
+            mensaje.textContent = "";
 
-        // ==========================================
-        // VALIDAR CAMPOS
-        // ==========================================
+            // ==========================================
+            // VALIDAR CAMPOS
+            // ==========================================
 
-        if (
-            !nombre ||
-            !correo ||
-            !password ||
-            !confirmarPassword
-        ) {
+            if (
+                !nombre ||
+                !correo ||
+                !password ||
+                !confirmarPassword
+            ) {
 
-            mensaje.textContent =
-                "Completa todos los campos.";
+                mensaje.textContent =
+                    "Completa todos los campos.";
 
-            return;
+                return;
+            }
 
-        }
+            // ==========================================
+            // VALIDAR CONTRASEÑAS
+            // ==========================================
 
+            if (
+                password !==
+                confirmarPassword
+            ) {
 
-        // ==========================================
-        // VALIDAR CONTRASEÑAS
-        // ==========================================
+                mensaje.textContent =
+                    "Las contraseñas no coinciden.";
 
-        if (
-            password !==
-            confirmarPassword
-        ) {
+                return;
+            }
 
-            mensaje.textContent =
-                "Las contraseñas no coinciden.";
+            try {
 
-            return;
+                const respuesta =
+                    await fetch(
+                        "/api/auth/registro",
+                        {
+                            method: "POST",
 
-        }
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
+                            body: JSON.stringify({
+                                nombre,
+                                correo,
+                                password
+                            })
+                        }
+                    );
 
-        try {
+                const datos =
+                    await respuesta.json();
 
-            const respuesta =
-                await fetch(
-                    "/api/auth/registro",
-                    {
-                        method: "POST",
+                mensaje.textContent =
+                    datos.mensaje;
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+                if (respuesta.ok) {
 
-                        body: JSON.stringify({
-                            nombre,
-                            correo,
-                            password
-                        })
-                    }
-                );
+                    formulario.reset();
 
+                    setTimeout(() => {
 
-            const datos =
-                await respuesta.json();
+                        window.location.href =
+                            "/login.html";
 
+                    }, 1500);
+                }
 
-            mensaje.textContent =
-                datos.mensaje;
+            } catch (error) {
 
+                console.error(error);
 
-            if (respuesta.ok) {
-
-                formulario.reset();
-
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        "/login.html";
-
-                }, 1500);
+                mensaje.textContent =
+                    "No se pudo conectar con el servidor.";
 
             }
 
-        } catch (error) {
-
-            console.error(error);
-
-            mensaje.textContent =
-                "No se pudo conectar con el servidor.";
-
         }
-
-    }
-);
+    );
 
 } else {
 
-console.error(
-    "No se encontró el formulario de registro."
-);
+    console.error(
+        "No se encontró el formulario de registro."
+    );
 
 }
