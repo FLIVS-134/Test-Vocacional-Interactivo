@@ -13,6 +13,61 @@
 
 </head>
 
+<script>
+    const enlaceSesion =
+        document.getElementById("enlaceSesion");
+
+    const usuarioGuardado =
+        localStorage.getItem("usuario");
+
+    if (usuarioGuardado) {
+
+        enlaceSesion.textContent =
+            "Cerrar sesión";
+
+        enlaceSesion.href = "#";
+
+        enlaceSesion.addEventListener(
+            "click",
+            async function (event) {
+
+                event.preventDefault();
+
+                try {
+
+                    const respuesta =
+                        await fetch(
+                            "/api/auth/logout"
+                        );
+
+                    if (respuesta.ok) {
+
+                        localStorage.removeItem(
+                            "usuario"
+                        );
+
+                        window.location.href =
+                            "/login.html";
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Error al cerrar sesión:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    }
+</script>
+
+<script src="/js/sesion.js"></script>
+
 <body>
 
     <!-- =========================================
@@ -36,9 +91,10 @@
             <a href="#inicio">Inicio</a>
             <a href="#como-funciona">¿Cómo funciona?</a>
             <a href="#beneficios">Beneficios</a>
+            <a href="/consejos.html">Consejos</a>
         </nav>
 
-        <a href="/login.html" class="btn-login">
+        <a href="/login.html" class="btn-login" id="enlaceSesion">
             Iniciar sesión
         </a>
 
@@ -338,7 +394,7 @@
 ========================================== -->
 
     <button id="flivs-boton" class="flivs-boton" aria-label="Abrir FLIVS">
-        <img src="/img/logo.png" alt="FLIVS">
+        <img src="/img/logo2.png" alt="FLIVS">
     </button>
 
 
@@ -348,7 +404,7 @@
 
             <div class="flivs-header-info">
 
-                <img src="/img/logo.png" alt="FLIVS">
+                <img src="/img/logo2.png" alt="FLIVS">
 
                 <div>
                     <strong>FLIVS</strong>

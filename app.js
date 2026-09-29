@@ -18,6 +18,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET || "test-vocacional-secreto",
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
         httpOnly: true,
         secure: false,

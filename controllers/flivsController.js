@@ -1,26 +1,51 @@
 const OpenAI = require("openai");
 
+const conexion = require("../config/database");
+
 const client = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 const responderFLIVS = async (req, res) => {
+
     try {
+
         const { mensaje } = req.body;
 
         if (!mensaje || !mensaje.trim()) {
+
             return res.status(400).json({
                 error: "Escribe una pregunta para FLIVS."
             });
+
         }
 
-        const respuesta = await client.chat.completions.create({
-            model: "openrouter/free",
-            messages: [
-                {
-                    role: "system",
-                    content: `
+
+        // ==========================================
+        // OBTENER USUARIO DE LA SESIÓN
+        // ==========================================
+
+        const usuario =
+            req.session.usuario || null;
+
+        console.log("USUARIO EN SESIÓN PARA FLIVS:", usuario);
+
+        // ==========================================
+        // CONSULTAR A FLIVS
+        // ==========================================
+
+        const respuesta =
+            await client.chat.completions.create({
+
+                model: "openrouter/free",
+
+                messages: [
+
+                    {
+                        role: "system",
+
+                        content: `
 Eres FLIVS, el asistente virtual del Test Vocacional Interactivo.
 
 Tu función es ayudar a los usuarios con información relacionada con:
@@ -42,29 +67,96 @@ IMPORTANTE:
 - Si no tienes suficiente información para responder correctamente,
   dilo en lugar de inventar datos.
 - Puedes comparar diferentes opciones cuando el usuario lo solicite.
-                    `
-                },
-                {
-                    role: "user",
-                    content: mensaje
-                }
-            ]
-        });
+                        `
+                    },
 
-        const texto = respuesta.choices[0].message.content;
+                    {
+                        role: "user",
+                        content: mensaje
+                    }
+
+                ]
+
+            });
+
+
+        const texto =
+            respuesta.choices[0].message.content;
+
+
+        // ==========================================
+        // GUARDAR CONVERSACIÓN SI HAY SESIÓN
+        // ==========================================
+
+        if (usuario && usuario.id) {
+
+            try {
+
+                const [resultado] = await conexion.query(
+
+                    `
+            INSERT INTO conversaciones_flivs
+            (
+                id_usuario,
+                pregunta,
+                respuesta
+            )
+            VALUES (?, ?, ?)
+            `,
+
+                    [
+                        usuario.id,
+                        mensaje.trim(),
+                        texto
+                    ]
+
+                );
+
+                console.log(
+                    "CONVERSACIÓN GUARDADA CORRECTAMENTE:",
+                    resultado.insertId
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "ERROR AL GUARDAR CONVERSACIÓN:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // ==========================================
+        // ENVIAR RESPUESTA A FLIVS
+        // ==========================================
 
         res.json({
             respuesta: texto
         });
 
+
     } catch (error) {
-        console.error("Error en FLIVS:", error);
+
+        console.error(
+            "Error en FLIVS:",
+            error
+        );
+
 
         res.status(500).json({
-            error: "No fue posible obtener una respuesta de FLIVS."
+
+            error:
+                "No fue posible obtener una respuesta de FLIVS."
+
         });
+
     }
+
 };
+
 
 module.exports = {
     responderFLIVS
