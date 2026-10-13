@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="/img/logob.png">
+
+    <title>Usuarios | Panel Administrador</title>
+
+    <link rel="stylesheet" href="/css/estilos.css">
+
+</head>
+
+<body>
+
+<header class="inicio-header">
+
+    <div class="inicio-logo">
+
+        <img
+            src="/img/logo.png"
+            alt="Logo Test Vocacional"
+        >
+
+    </div>
+
+
+    <nav class="inicio-nav">
+
+        <a href="/index.html">
+            Inicio
+        </a>
+
+        <a href="/admin/panel.html">
+            Panel
+        </a>
+
+        <a href="/admin/preguntas.html">
+            Preguntas
+        </a>
+
+        <button
+            type="button"
+            class="btn-login"
+            onclick="window.location.href='/login.html'"
+        >
+            Cerrar sesión
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+    <section class="admin-container">
+
+        <div class="test-header">
+
+            <div class="hero-etiqueta">
+                ADMINISTRACIÓN
+            </div>
+
+            <h1>
+                Gestionar <span>usuarios</span>
+            </h1>
+
+            <p>
+                Consulta la información de los usuarios
+                registrados en el sistema.
+            </p>
+
+        </div>
+
+
+        <div class="botones-test">
+
+            <button
+                type="button"
+                class="btn-test btn-secundario"
+                onclick="window.location.href='/admin/panel.html'"
+            >
+                Volver al panel
+            </button>
+
+        </div>
+
+
+        <div
+            id="mensaje"
+            style="margin-top: 25px;"
+        ></div>
+
+
+        <div
+            id="listaUsuarios"
+            style="margin-top: 35px;"
+        >
+
+            <div class="pregunta">
+
+                <h3>
+                    Usuarios registrados
+                </h3>
+
+                <p>
+                    Los usuarios registrados aparecerán
+                    aquí cuando se conecte la base de datos.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        © 2026 Test Vocacional Interactivo.
+        Todos los derechos reservados.
+        ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+    </p>
+
+</footer>
+
+
+<script src="/js/usuarios.js"></script>
+
+</body>
+</html>

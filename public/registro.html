@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/img/logob.png">
+    <title>Crear cuenta | Test Vocacional</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+
+<body>
+
+
+    <header class="inicio-header">
+        <div class="inicio-logo">
+            <img src="/img/logo.png" alt="Logo Test Vocacional">
+        </div>
+
+        <nav class="inicio-nav">
+            <a href="/index.html">Inicio</a>
+            <a href="/index.html#como-funciona">¿Cómo funciona?</a>
+            <a href="/index.html#beneficios">Beneficios</a>
+            <a href="/login.html" class="btn-login">Iniciar sesión</a>
+        </nav>
+    </header>
+
+
+    <main class="registro-page">
+
+        <section class="registro-card">
+
+            <div class="registro-icono">
+                <img src="/img/logo.png" alt="Logo Test Vocacional">
+            </div>
+
+            <div class="registro-header">
+
+                <div class="hero-etiqueta">
+                    TEST VOCACIONAL INTERACTIVO
+                </div>
+
+                <h1>
+                    Crea tu <span>cuenta</span>
+                </h1>
+
+                <p>
+                    Regístrate para comenzar tu experiencia vocacional
+                    y descubrir qué áreas pueden ser ideales para ti.
+                </p>
+
+            </div>
+
+
+            <form id="registroForm" class="registro-form" autocomplete="off">
+
+                <div class="registro-campo">
+
+                    <label for="nombre">
+                        Nombre completo
+                    </label>
+
+                    <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre completo"
+                        autocomplete="name" required>
+
+                </div>
+
+
+                <div class="registro-campo">
+
+                    <label for="correo">
+                        Correo electrónico
+                    </label>
+
+                    <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" autocomplete="off"
+                        required>
+
+                </div>
+
+
+                <div class="registro-campo">
+
+                    <label for="password">
+                        Contraseña
+                    </label>
+
+                    <input type="password" id="password" name="password" placeholder="Crea una contraseña"
+                        autocomplete="new-password" required>
+
+                </div>
+
+
+                <div class="registro-campo">
+
+                    <label for="confirmarPassword">
+                        Confirmar contraseña
+                    </label>
+
+                    <input type="password" id="confirmarPassword" name="confirmarPassword"
+                        placeholder="Repite tu contraseña" autocomplete="new-password" required>
+
+                </div>
+
+
+                <div id="mensaje"></div>
+
+
+                <button type="submit" class="registro-boton">
+                    Crear cuenta
+                </button>
+
+            </form>
+
+
+            <div class="registro-login">
+
+                <p>
+                    ¿Ya tienes una cuenta?
+
+                    <a href="/login.html">
+                        Inicia sesión
+                    </a>
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+
+        <p>
+            © 2026 Test Vocacional Interactivo.
+            Todos los derechos reservados.
+            ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+        </p>
+
+    </footer>
+
+
+    <script src="/js/registro.js"></script>
+
+</body>
+
+</html>

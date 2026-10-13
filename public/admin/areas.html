@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="/img/logob.png">
+
+    <title>Áreas | Panel Administrador</title>
+
+    <link rel="stylesheet" href="/css/estilos.css">
+
+</head>
+
+<body>
+
+<header class="inicio-header">
+
+    <div class="inicio-logo">
+
+        <img src="/img/logo.png" alt="Logo Test Vocacional">
+
+    </div>
+
+
+    <nav class="inicio-nav">
+
+        <a href="/index.html">
+            Inicio
+        </a>
+
+        <a href="/admin/panel.html">
+            Panel
+        </a>
+
+        <a href="/admin/preguntas.html">
+            Preguntas
+        </a>
+
+        <button
+            type="button"
+            class="btn-login"
+            onclick="window.location.href='/login.html'"
+        >
+            Cerrar sesión
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+    <section class="admin-container">
+
+        <div class="test-header">
+
+            <div class="hero-etiqueta">
+                ADMINISTRACIÓN
+            </div>
+
+            <h1>
+                Gestionar <span>áreas</span>
+            </h1>
+
+            <p>
+                Administra las áreas vocacionales
+                disponibles en el sistema.
+            </p>
+
+        </div>
+
+
+        <div class="botones-test">
+
+            <button
+                type="button"
+                class="btn-test btn-principal"
+                id="btnNuevaArea"
+            >
+                + Nueva área
+            </button>
+
+            <button
+                type="button"
+                class="btn-test btn-secundario"
+                onclick="window.location.href='/admin/panel.html'"
+            >
+                Volver al panel
+            </button>
+
+        </div>
+
+
+        <div
+            id="formularioArea"
+            style="display: none; margin-top: 30px;"
+        >
+
+            <div class="pregunta">
+
+                <label for="nombreArea">
+                    Nombre del área
+                </label>
+
+                <input
+                    type="text"
+                    id="nombreArea"
+                    name="nombreArea"
+                    placeholder="Ejemplo: Tecnología"
+                >
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <label for="descripcionArea">
+                    Descripción
+                </label>
+
+                <textarea
+                    id="descripcionArea"
+                    name="descripcionArea"
+                    rows="4"
+                    placeholder="Escribe una descripción del área..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="botones-test">
+
+                <button
+                    type="button"
+                    class="btn-test btn-principal"
+                    id="btnGuardarArea"
+                >
+                    Guardar área
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-test btn-secundario"
+                    id="btnCancelarArea"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="mensaje"
+            style="margin-top: 25px;"
+        ></div>
+
+
+        <div
+            id="listaAreas"
+            style="margin-top: 35px;"
+        >
+
+            <div class="pregunta">
+
+                <h3>
+                    Áreas registradas
+                </h3>
+
+                <p>
+                    Las áreas registradas aparecerán
+                    aquí cuando se conecte la base de datos.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        © 2026 Test Vocacional Interactivo.
+        Todos los derechos reservados.
+        ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+    </p>
+
+</footer>
+
+
+<script src="/js/areas.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="/img/logob.png">
+
+    <title>Test Vocacional Interactivo</title>
+
+    <link rel="stylesheet" href="/css/estilos.css">
+
+</head>
+
+<body>
+
+<header class="inicio-header">
+
+    <div class="inicio-logo">
+        <img src="/img/logo.png" alt="Logo Test Vocacional">
+    </div>
+
+    <nav class="inicio-nav">
+
+        <a href="/index.html">
+            Inicio
+        </a>
+
+        <a href="/index.html#como-funciona">
+            ¿Cómo funciona?
+        </a>
+
+        <a href="/index.html#beneficios">
+            Beneficios
+        </a>
+
+        <a href="/login.html" class="btn-login" id="enlaceSesion">Iniciar sesión</a>
+
+    </nav>
+
+</header>
+
+
+<main class="test-container">
+
+    <header class="test-header">
+        <h1>Test <span>Vocacional</span></h1>
+
+        <p>
+            Descubre tus intereses, habilidades y áreas profesionales
+            que podrían encajar contigo.
+        </p>
+    </header>
+
+
+    <!-- PROGRESO -->
+
+    <section class="progreso-contenedor">
+
+        <div class="progreso-info">
+            <span>Progreso</span>
+            <span id="progresoTexto">0%</span>
+        </div>
+
+        <div class="progreso-barra">
+            <div id="progreso"></div>
+        </div>
+
+    </section>
+
+
+    <!-- PREGUNTAS -->
+
+    <section id="preguntasContainer">
+
+        <!-- Las preguntas serán cargadas mediante JavaScript -->
+
+    </section>
+
+
+    <!-- MENSAJE -->
+
+    <div id="mensaje"></div>
+
+
+    <!-- BOTONES -->
+
+    <div class="botones-test">
+
+        <button
+            type="button"
+            class="btn-test btn-secundario"
+            id="btnAnterior">
+            Anterior
+        </button>
+
+        <button
+            type="button"
+            class="btn-test btn-principal"
+            id="btnSiguiente">
+            Siguiente
+        </button>
+
+    </div>
+
+
+    <!-- RESULTADO -->
+
+    <section
+        class="resultado-container"
+        id="resultadoContainer">
+
+        <h2>
+            ¡Tu resultado está <span>listo!</span>
+        </h2>
+
+        <p id="resultadoTexto">
+            Estamos analizando tus respuestas.
+            ATT: Fabián, Luisa, Isabella, Valeria, Samuel.
+        </p>
+
+    </section>
+
+</main>
+
+
+<script>
+    const enlaceSesion =
+        document.getElementById("enlaceSesion");
+
+    const usuarioGuardado =
+        localStorage.getItem("usuario");
+
+    if (usuarioGuardado) {
+
+        enlaceSesion.textContent =
+            "Cerrar sesión";
+
+        enlaceSesion.href = "#";
+
+        enlaceSesion.addEventListener(
+            "click",
+            async function (event) {
+
+                event.preventDefault();
+
+                try {
+
+                    const respuesta =
+                        await fetch(
+                            "/api/auth/logout"
+                        );
+
+                    if (respuesta.ok) {
+
+                        localStorage.removeItem(
+                            "usuario"
+                        );
+
+                        window.location.href =
+                            "/login.html";
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Error al cerrar sesión:",
+                        error
+                    );
+
+                }
+
+            }
+        );
+    }
+</script>
+
+    <!-- =========================================
+     FLIVS - ASISTENTE VOCACIONAL
+========================================== -->
+
+    <button id="flivs-boton" class="flivs-boton" aria-label="Abrir FLIVS">
+        <img src="/img/logoc.png" alt="FLIVS">
+    </button>
+
+
+    <div id="flivs-chat" class="flivs-chat">
+
+        <div class="flivs-header">
+
+            <div class="flivs-header-info">
+
+                <img src="/img/logo2.png" alt="FLIVS">
+
+                <div>
+                    <strong>FLIVS</strong>
+                    <span>Asistente vocacional</span>
+                </div>
+
+            </div>
+
+            <button id="flivs-cerrar" class="flivs-cerrar" aria-label="Cerrar FLIVS">
+                ×
+            </button>
+
+        </div>
+
+
+        <div id="flivs-mensajes" class="flivs-mensajes">
+
+            <div class="flivs-mensaje flivs-bot">
+                Hola 👋 Soy FLIVS.<br><br>
+                Puedo ayudarte con preguntas sobre carreras, universidades,
+                diferencias entre carreras y orientación académica.
+                <br><br>
+                ¿Qué quieres saber?
+            </div>
+
+        </div>
+
+
+        <div class="flivs-escribiendo" id="flivs-escribiendo">
+            FLIVS está escribiendo...
+        </div>
+
+
+        <form id="flivs-form" class="flivs-form">
+
+            <input type="text" id="flivs-input" placeholder="Escribe tu pregunta..." autocomplete="off" required>
+
+            <button type="submit">
+                ➤
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================================
+     JAVASCRIPT DE FLIVS
+========================================== -->
+
+    <script>
+
+        const flivsBoton = document.getElementById("flivs-boton");
+        const flivsChat = document.getElementById("flivs-chat");
+        const flivsCerrar = document.getElementById("flivs-cerrar");
+
+        const flivsForm = document.getElementById("flivs-form");
+        const flivsInput = document.getElementById("flivs-input");
+        const flivsMensajes = document.getElementById("flivs-mensajes");
+        const flivsEscribiendo = document.getElementById("flivs-escribiendo");
+
+
+        // Abrir FLIVS
+
+        flivsBoton.addEventListener("click", () => {
+
+            flivsChat.classList.add("flivs-chat-visible");
+
+            flivsInput.focus();
+
+        });
+
+
+        // Cerrar FLIVS
+
+        flivsCerrar.addEventListener("click", () => {
+
+            flivsChat.classList.remove("flivs-chat-visible");
+
+        });
+
+
+        // Agregar mensaje a la conversación
+
+        function agregarMensaje(texto, tipo) {
+
+            const mensaje = document.createElement("div");
+
+            mensaje.classList.add(
+                "flivs-mensaje",
+                tipo === "usuario"
+                    ? "flivs-usuario"
+                    : "flivs-bot"
+            );
+
+            if (tipo === "bot") {
+
+                let textoFormateado = texto
+                    // Negrita: **texto**
+                    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+
+                    // Cursiva: *texto*
+                    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+
+                    // Saltos de línea
+                    .replace(/\n/g, "<br>");
+
+                mensaje.innerHTML = textoFormateado;
+
+            } else {
+
+                mensaje.textContent = texto;
+
+            }
+
+            flivsMensajes.appendChild(mensaje);
+
+            flivsMensajes.scrollTop = flivsMensajes.scrollHeight;
+        }
+
+
+        // Enviar pregunta
+
+        flivsForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const mensaje = flivsInput.value.trim();
+
+            if (!mensaje) {
+                return;
+            }
+
+
+            // Mostrar mensaje del usuario
+
+            agregarMensaje(mensaje, "usuario");
+
+            flivsInput.value = "";
+
+            flivsEscribiendo.classList.add("flivs-escribiendo-visible");
+
+
+            try {
+
+                const respuesta = await fetch("/api/flivs/preguntar", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        mensaje: mensaje
+                    })
+
+                });
+
+
+                const datos = await respuesta.json();
+
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        datos.error || "No fue posible obtener una respuesta."
+                    );
+
+                }
+
+
+                agregarMensaje(
+                    datos.respuesta,
+                    "bot"
+                );
+
+
+            } catch (error) {
+
+                console.error("Error al comunicarse con FLIVS:", error);
+
+                agregarMensaje(
+                    "Lo siento, no pude responder en este momento. Intenta nuevamente.",
+                    "bot"
+                );
+
+            } finally {
+
+                flivsEscribiendo.classList.remove("flivs-escribiendo-visible");
+
+            }
+
+        });
+
+    </script>
+
+<script src="/js/test.js"></script>
+
+</body>
+</html>
